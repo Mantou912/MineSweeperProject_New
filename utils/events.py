@@ -26,6 +26,7 @@ def login_connect():
         if CM_server.login(username, password):
             # 生成cookie
             cookie = None
+
             while True:
                 cookie = str(gen_cookie())
                 if cookie not in cookie_user_dict:
