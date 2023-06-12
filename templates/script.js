@@ -244,26 +244,18 @@ const App = () => {
             React.createElement("div", {className: "playerslist"}, /*#__PURE__*/
                 React.createElement("div", {className: "table"}, /*#__PURE__*/
                     React.createElement("div", null, "#"), /*#__PURE__*/
-                    React.createElement("div", null, "Name"), /*#__PURE__*/
-                    React.createElement("div", null, "LVL"), /*#__PURE__*/
-                    React.createElement("div", null, "XP"), /*#__PURE__*/
-                    React.createElement("div", null, "Coins"), /*#__PURE__*/
-                    React.createElement("div", null, "Likes"), /*#__PURE__*/
-                    React.createElement("div", null, "Pass"), /*#__PURE__*/
-                    React.createElement("div", null, "Resources")), /*#__PURE__*/
+                    React.createElement("div", null, "Name"),
+                    React.createElement("div", null, "LVL"),
+                    React.createElement("div", null, "XP")),
                 React.createElement("div", {className: "list"},
                     dados.map((leader, index) => /*#__PURE__*/
                         React.createElement("div", {className: "player", key: leader.id}, /*#__PURE__*/
                             React.createElement("span", null, " ", index + 1), /*#__PURE__*/
                             React.createElement("div", {className: "user"}, /*#__PURE__*/
-                                React.createElement("img", {className: "image", src: leader.image}), /*#__PURE__*/
-                                React.createElement("span", null, " ", leader.name, " ")), /*#__PURE__*/
-                            React.createElement("span", null, " ", leader.level, " "), /*#__PURE__*/
-                            React.createElement("span", null, " ", leader.xp, " "), /*#__PURE__*/
-                            React.createElement("span", null, " ", leader.coins, " "), /*#__PURE__*/
-                            React.createElement("span", null, " ", leader.love, " "), /*#__PURE__*/
-                            React.createElement("span", null, " ", leader.beacons, " "), /*#__PURE__*/
-                            React.createElement("span", null, " ", leader.resources, " ")))))));
+                                React.createElement("img", {className: "image", src: leader.image}),
+                                React.createElement("span", null, " ", leader.name, " ")),
+                            React.createElement("span", null, " ", leader.level, " "),
+                            React.createElement("span", null, " ", leader.xp, " ")))))));
 };
 
 ReactDOM.render( /*#__PURE__*/React.createElement(App, null),

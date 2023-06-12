@@ -173,28 +173,7 @@
     <canvas id="canvas" width="1756" height="1320" style="
     margin-left: 40px;display: block;"></canvas>
 </div>
-<div class="contextmenu" id="context">
-    <table>
-        <thead>
-        <div>
-            <a href="" target="_blank" id="total_Rank"><font color="blue">查看总榜</font></a>
-        </div>
-        </thead>
-        <thead>
-        本局扫雷排行榜&nbsp;&nbsp;&nbsp;
-        </thead>
-        <thead>
-        <tr>
-            <th>用户名&nbsp;&nbsp;</th>
-            <th>坑壁值</th>
-            <th>开荒数</th>
-            <th>K/D</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
+
 <script>
     //获取画布变量
     let canv = document.getElementById('canvas');
@@ -556,7 +535,7 @@
     document.getElementById("totalRank").href = totalRankLink;
     document.getElementById("total_Rank").href = totalRankLink;
 
-    socket.on("connect", (revconnect) => {
+    socket.on("connect", () => {
     })
 
     rev_seed()
