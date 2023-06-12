@@ -157,4 +157,3 @@ def get_total_rank(info):
     except Exception as e:
         logging.info('>>> error ' + str(type(e)) + ' ' + str(e))
         disconnect()
-
