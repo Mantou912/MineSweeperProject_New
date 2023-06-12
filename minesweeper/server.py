@@ -29,9 +29,7 @@ class Server:
         """
         color_number = self.__CM.get_user_color_num(username)
         color_string = self.__CM.get_user_color_str(color_number)
-
         click_status = self.__CM.click(x, y, username)
-
         finish = self.__CM.judge_win()
 
         bool_ret = False

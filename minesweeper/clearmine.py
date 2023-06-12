@@ -1,7 +1,10 @@
+import sys
 import time
-import numpy as np
 from random import randint
 from typing import Tuple, Dict, Optional, List
+
+import numpy as np
+
 from .colorrander import ColorRander
 from .config import (
     DEFAULT_PART_SIZE,
@@ -11,6 +14,8 @@ from .config import (
     DEFAULT_ROW_SIZE,
     DEFAULT_SEED,
 )
+
+sys.setrecursionlimit(100000)
 
 
 class ClearMine:
@@ -195,14 +200,14 @@ class ClearMine:
         if self.__board[x][y] == 0:
             for dir in ClearMine.Dir:
                 xx, yy = x + dir[0], y + dir[1]
-                if self.__judgeEdge(xx, yy) == False:
+                if not self.__judgeEdge(xx, yy):
                     continue
                 if self.__color[xx][yy] == 0:
                     self.__updateMask(xx, yy, color, False)
-        elif F == True:
+        elif F:
             for dir in ClearMine.Dir:
                 xx, yy = x + dir[0], y + dir[1]
-                if self.__judgeEdge(xx, yy) == False:
+                if not self.__judgeEdge(xx, yy):
                     continue
                 if self.__color[xx][yy] == 0 and self.__board[xx][yy] == 0:
                     self.__updateMask(xx, yy, color, False)

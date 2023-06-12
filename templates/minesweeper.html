@@ -12,7 +12,7 @@
         }
 
         body {
-            height: 150vh;
+            height: 140vh;
             background: linear-gradient(#141e30, #243b55);
             color: #03e9f4;
         }
@@ -171,13 +171,13 @@
 </div>
 <div style="align-items: center;width:auto;height: auto">
     <canvas id="canvas" width="1756" height="1320" style="
-    margin: auto;display: block;"></canvas>
+    margin-left: 40px;display: block;"></canvas>
 </div>
 <div class="contextmenu" id="context">
     <table>
         <thead>
         <div>
-            <a href="" target="_blank" id="tota_lRank"><font color="blue">查看总榜</font></a>
+            <a href="" target="_blank" id="total_Rank"><font color="blue">查看总榜</font></a>
         </div>
         </thead>
         <thead>
@@ -364,12 +364,13 @@
         let [x, y] = xy.split('-').map(n => n * w);
         ctx.save();
         ctx.font = '15px Arial';
-        ctx.fillStyle = '#FFF';
+        ctx.fillStyle = '#000000';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(txt, x + w / 2, y + w / 2);
         ctx.restore();
     }
+
 
     function getAround(xy) {
         let [x, y] = xy.split('-').map(n => n * 1);
@@ -401,7 +402,7 @@
     //为画布增加监听事件
     canv.addEventListener('click', openBlock);
     //为画布增加右键点击菜单事件
-    canv.addEventListener("contextmenu", kda);
+    canv.addEventListener("contextmenu", markFlag);
 
     function openBlock(ev) {
         //获得 x与y坐标
@@ -420,7 +421,6 @@
         } else if (g_obj[xy].mark === -1 && g_obj[xy].open === 0) {
             g_obj[xy].open = 1;
             markText(xy, mine[0]);
-            markText(xy, mine[3]);
         } else if (g_obj[xy].open === 0) {
             g_obj[xy].open = 1;
             markText(xy, g_obj[xy].mark);
@@ -429,26 +429,15 @@
         console.log(x, y);
     }
 
-    function kda(ev) {
-        socket.emit("rank", "query rank")//收取排行榜信息
+    function markFlag(ev) {
         ev.preventDefault();
-        let e = ev;
-        let contextmenu = document.getElementById("context");
-        // 获取菜单，让菜单显示出来
-        let context = document.getElementById("context");
-        context.style.display = "block";
-        //  让菜单随着鼠标的移动而移动
-        //  获取鼠标的坐标
-        let x = e.offsetX;
-        let y = e.offsetY;
-
-        //  调整宽度和高度
-        context.style.left = x - 200 + "px" //Math.min(w-202,x)+"px";
-        context.style.top = y + "px" //Math.min(h-230,y)+"px";
-
-        // return false可以关闭系统默认菜单
+        //获得 x与y坐标
+        let x = ~~(ev.offsetX / w);
+        let y = ~~(ev.offsetY / w);
+        let xy = x + '-' + y;
+        if (g_obj[xy].open === 0)
+            markText(xy, mine[1]);
         return false;
-
     }
 
     function dfszero(xy) {
@@ -534,7 +523,6 @@
         } else if (g_obj[xy].mark === -1) {
             drawBlock(xy, revcolor);
             markText(xy, mine[0]);
-            markText(xy, mine[3]);
         } else {
             drawBlock(xy, revcolor);
             markText(xy, g_obj[xy].mark);
@@ -566,13 +554,14 @@
     //设置总榜页面地址并送出用户名数据作为鉴别
     let totalRankLink = '/ranks?uname=' + this_cookie;
     document.getElementById("totalRank").href = totalRankLink;
+    document.getElementById("total_Rank").href = totalRankLink;
 
     socket.on("connect", (revconnect) => {
     })
 
-    revseed()
+    rev_seed()
 
-    function revseed() {
+    function rev_seed() {
         socket.on("args", (seedmsg) => {//用于接收服务器发送客服端
             let seed = JSON.parse(seedmsg);
             let new_row = seed.row;
@@ -742,7 +731,6 @@
         } else if (g_obj[xy].mark === -1 && g_obj[xy].open === 0) {
             g_obj[xy].open = 1;
             markText(xy, mine[0]);
-            markText(xy, mine[3]);
         } else if (g_obj[xy].open === 0) {
             g_obj[xy].open = 1;
             markText(xy, g_obj[xy].mark);
@@ -758,7 +746,6 @@
             g_obj[xy].time = revtimmer;
             drawBlock(xy, revcolor);
             markText(xy, mine[0]);
-            markText(xy, mine[3]);
         } else if (g_obj[xy].time > revtimmer) {
             g_obj[xy].time = revtimmer;
             drawBlock(xy, revcolor);

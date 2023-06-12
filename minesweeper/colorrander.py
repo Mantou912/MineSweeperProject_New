@@ -104,28 +104,28 @@ class ColorRander:
 
     def rand_color(self) -> str:
         """尽可能有区分度且不重复地随机得到一种颜色"""
-        choosen_color, choosen_kind = 0, 0
+        chosen_color, chosen_kind = 0, 0
 
         # 优先保证每一种色调的颜色出现次数平均
         index = randint(0, self.__colors - 1)
         threshold = self.__counts["sum"] // self.__colors
         while True:
             if self.__counts["colors"][index] <= threshold:
-                choosen_color = index
+                chosen_color = index
                 break
             index = (index + 1) % self.__colors
 
         # 保证同一种色调不同深浅的颜色出现次数平均
         index = randint(0, self.__kinds - 1)
-        threshold = self.__counts["colors"][choosen_color] // self.__kinds
+        threshold = self.__counts["colors"][chosen_color] // self.__kinds
         while True:
-            if self.__counts["kinds"][choosen_color][index] <= threshold:
-                choosen_kind = index
+            if self.__counts["kinds"][chosen_color][index] <= threshold:
+                chosen_kind = index
                 break
             index = (index + 1) % self.__kinds
 
         self.__counts["sum"] += 1
-        self.__counts["colors"][choosen_color] += 1
-        self.__counts["kinds"][choosen_color][choosen_kind] += 1
+        self.__counts["colors"][chosen_color] += 1
+        self.__counts["kinds"][chosen_color][chosen_kind] += 1
 
-        return ColorRander.BaseColor[choosen_color][choosen_kind]
+        return ColorRander.BaseColor[chosen_color][chosen_kind]
