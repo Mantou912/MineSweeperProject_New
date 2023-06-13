@@ -2,8 +2,8 @@ import time
 from typing import List
 from typing import Tuple
 
-from .clearmine import ClearMine
-from .databaseOperator import sqlOperator
+from .mineSweeper import ClearMine
+from .database import sqlOperator
 
 
 class Server:

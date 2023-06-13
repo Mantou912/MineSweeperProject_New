@@ -81,7 +81,7 @@ def mine_disconnect():
     user_cookie_tm = cookie_user_dict.get(cookie, None)
     if user_cookie_tm:
         username, tm = user_cookie_tm
-        del user_cookie_tm[username]
+        del user_cookie[username]
         del cookie_user_dict[cookie]
         logging.info('cookie信息成功杀掉...')
     logging.info('扫雷连接断开...')

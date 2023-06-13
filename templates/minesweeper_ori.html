@@ -594,7 +594,7 @@
             }
             //计算每个用户的kda
             for (let i = 0; i < datas.length; i++) {
-                if (datas[i].boom == 0) datas[i].kd = datas[i].score
+                if (datas[i].boom === 0) datas[i].kd = datas[i].score
                 else datas[i].kd = datas[i].score / datas[i].boom
                 sortdata[i] = datas[i].kd;
                 index[i] = [i];
@@ -602,7 +602,7 @@
             //根据用户的kda进行排序
             for (let m = 0; m < sortdata.length; m++) {
                 for (let n = 0; n < sortdata.length; n++) {
-                    if (m != n && sortdata[n] < sortdata[m]) {
+                    if (m !== n && sortdata[n] < sortdata[m]) {
                         let tmp = sortdata[n];
                         sortdata[n] = sortdata[m];
                         sortdata[m] = tmp;
@@ -619,10 +619,10 @@
                 let cur_color = datas[index[i]].color;
                 console.log(cur_color);
                 for (let k in datas[index[i]]) {
-                    if (k == "color")
+                    if (k === "color")
                         continue;
                     let td = document.createElement('td');
-                    if (k == "kd") {
+                    if (k === "kd") {
                         td.innerHTML = datas[index[i]][k].toFixed(2);
                         tr.appendChild(td);
                         tr.style.background = cur_color;

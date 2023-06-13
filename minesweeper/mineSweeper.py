@@ -5,27 +5,12 @@ from typing import Tuple, Dict, Optional, List
 
 import numpy as np
 
-from .colorrander import ColorRander
-from .config import (
-    DEFAULT_PART_SIZE,
-    DEFAULT_COL_SIZE,
-    DEFAULT_MOD,
-    DEFAULT_PART_MINE_NUM,
-    DEFAULT_ROW_SIZE,
-    DEFAULT_SEED,
-)
+from .rangeColor import ColorRander
 
 sys.setrecursionlimit(100000)
 
 
 class ClearMine:
-    """
-    1.实例化对象后游戏自动开始
-    2.收到点击请求后调用click方法, 返回得分或错误信息
-    3.每次调用click方法后, 需要手动调用judge_win方法判断游戏是否结束
-    4.若游戏结束, 调用restart方法重开游戏
-    """
-
     MINE = 9
     CELLTYPE = np.int16
     Dir = tuple(
@@ -37,12 +22,12 @@ class ClearMine:
 
     def __init__(
             self,
-            size_row: int = DEFAULT_ROW_SIZE,
-            size_col: int = DEFAULT_COL_SIZE,
-            part_size: int = DEFAULT_PART_SIZE,  # 每一子块边长, 保证不要超过numpy.int16
-            part_mine_num: int = DEFAULT_PART_MINE_NUM,  # 每一子块的雷数, 保证不要超过子块大小
-            seed: int = DEFAULT_SEED,
-            mod: int = DEFAULT_MOD,
+            size_row: int = 30,
+            size_col: int = 40,
+            part_size: int = 16,  # 每一子块边长, 保证不要超过numpy.int16
+            part_mine_num: int = 70,  # 每一子块的雷数, 保证不要超过子块大小
+            seed: int = 1437341,
+            mod: int = 33554393,
     ) -> None:
         """初始化"""
 

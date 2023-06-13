@@ -36,7 +36,7 @@ def total_rank():
     res = '无权限'
     try:
         if request.args['uname'] in cookie_user_dict:
-            res = make_response(render_template('ranks.html'))
+            res = make_response(render_template('ranks_N.html'))
         else:
             res += ', 请重新登录'
     except Exception as e:

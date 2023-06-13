@@ -3,11 +3,9 @@ from typing import Optional, List
 
 import pymysql
 
-from .config import HOST, USER, PASSWORD, DATABASE
-
 
 class sqlOperator:
-    def __init__(self, host=HOST, user=USER, password=PASSWORD, database=DATABASE):
+    def __init__(self, host='127.0.0.1', user='root', password='Mt369815..', database='minesweeper'):
         self.__cursor = None
         self.__connection = None
         self.__host = host
