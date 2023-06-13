@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RANK</title>
+    <style>
+        body {
+            height: 100vh;
+            background: linear-gradient(#141e30, #243b55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            color: #03e9f4;
+        }
+
+        .ranksList {
+            width: 400px;
+            height: 700px;
+            background-color: #0c1622;
+            margin: 100px auto;
+            border-radius: 10px;
+            box-shadow: 0 15px 25px 0 rgba(0, 0, 0, .6);
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            color: aliceblue;
+            margin-bottom: 30px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        table {
+            border-spacing: 16px 10px; /* 水平方向为5像素，垂直方向为10像素 */
+        }
+
+        table td {
+            border: 0 solid white;
+            color: aliceblue;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<script src={{ url_for('static', filename='socket.io.js' ) }}></script>
+<div class="ranksList">
+    <h2>Ranks</h2>
+    <div>
+        <div id="rankList">
+            <table>
+                <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Blocks</th>
+                    <th>Bombs</th>
+                    <th>SCORES</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <script>
+                //接收saolei查看总榜界面的cookie
+                let name = decodeURI(document.URL);
+                name = name.slice(name.indexOf("=") + 1);
+                socket = io.connect('ws://' + document.domain + ':' + location.port + '/ranks', {
+                    reconnectionDelayMax: 10000,
+                    query: {
+                        "cookie": name
+                    }
+                })
+                socket.on("connect", function conn_inf() {
+                    socket.emit("total_rank", "query rank")
+                })
+
+                function send_inf() {
+                    socket.emit("total_rank", "query rank")
+                }
+
+                //接收数据库里的总榜信息
+                socket.on("total_rank", (revallrank) => {
+                    let rev_rank = JSON.parse(revallrank);
+                    let tbody = document.querySelector('tbody');
+                    let child = tbody.childNodes;
+                    for (let i = child.length - 1; i >= 0; i--) {
+                        tbody.removeChild(child[i]);
+                    }
+
+                    /*创建信息数组*/
+                    let datas = [];
+                    let sortdata = [];
+                    let index = [];
+                    for (let i = 0; i < rev_rank.length; i++) {
+                        if (rev_rank[i].boomCount === 0)
+                            rev_rank[i].kd = rev_rank[i].clearCount
+                        else {
+                            rev_rank[i].kd = rev_rank[i].clearCount / rev_rank[i].boomCount;
+                        }
+                    }
+
+                    for (let key = 0; key < rev_rank.length; key++) {
+                        datas[key] = {
+                            name: rev_rank[key].username,
+                            clearCount: rev_rank[key].clearCount,
+                            boomCount: rev_rank[key].boomCount,
+                            kd: rev_rank[key].kd
+                        };
+                        index[key] = key;
+                        sortdata[key] = rev_rank[key].kd;
+                    }
+
+                    for (let m = 0; m < sortdata.length; m++) {
+                        for (let n = 0; n < sortdata.length; n++) {
+                            if (m !== n && sortdata[n] < sortdata[m]) {
+                                let tmp = sortdata[n];
+                                sortdata[n] = sortdata[m];
+                                sortdata[m] = tmp;
+                                let tmp_index = index[n];
+                                index[n] = index[m];
+                                index[m] = tmp_index;
+                            }
+                        }
+                    }
+
+                    for (let i = 0; i < datas.length; i++) {
+                        let tr = document.createElement('tr');
+                        tbody.appendChild(tr); //创建行
+                        for (let k in datas[index[i]]) {
+                            let td = document.createElement('td');
+                            if (k === "kd") {
+                                td.innerHTML = datas[index[i]][k].toFixed(2);
+                                tr.appendChild(td); //创建列
+                                continue
+                            }
+                            td.innerHTML = datas[index[i]][k];
+                            tr.appendChild(td); //创建列
+                        }
+                    }
+                })
+            </script>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

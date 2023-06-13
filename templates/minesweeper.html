@@ -34,19 +34,6 @@
             text-align: center;
         }
 
-
-        .contextmenu {
-            width: 350px;
-            border: 1px solid #999;
-            box-shadow: 3px 3px 3px #ccc;
-            background-color: #fff;
-            position: absolute;
-            top: 10px;
-            left: 15px;
-            display: none;
-            z-index: 9999999
-        }
-
         button {
             background: transparent;
             border: 0;
@@ -172,28 +159,6 @@
 <div style="align-items: center;width:auto;height: auto">
     <canvas id="canvas" width="1756" height="1320" style="
     margin-left: 40px;display: block;"></canvas>
-</div>
-<div class="contextmenu" id="context">
-    <table>
-        <thead>
-        <div>
-            <a href="" target="_blank" id="total_Rank"><font color="blue">查看总榜</font></a>
-        </div>
-        </thead>
-        <thead>
-        本局扫雷排行榜&nbsp;&nbsp;&nbsp;
-        </thead>
-        <thead>
-        <tr>
-            <th>用户名&nbsp;&nbsp;</th>
-            <th>坑壁值</th>
-            <th>开荒数</th>
-            <th>K/D</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
 </div>
 <script>
     //获取画布变量
@@ -542,7 +507,7 @@
 
 <script>
     //接受登陆界面cookie
-    var this_cookie = decodeURI(document.URL);
+    let this_cookie = decodeURI(document.URL);
     this_cookie = this_cookie.slice(this_cookie.indexOf("=") + 1);
     socket = io.connect('ws://' + document.domain + ':' + location.port + '/minesweeper', {
         reconnectionDelayMax: 10000,
@@ -554,7 +519,6 @@
     //设置总榜页面地址并送出用户名数据作为鉴别
     let totalRankLink = '/ranks?uname=' + this_cookie;
     document.getElementById("totalRank").href = totalRankLink;
-    document.getElementById("total_Rank").href = totalRankLink;
 
     socket.on("connect", (revconnect) => {
     })
@@ -611,15 +575,15 @@
                 boom: rev_rank[key].boom,
                 color: rev_rank[key].color,
                 score: rev_rank[key].score,
-                kd: 0
+                SCORE: 0
             };
             j++;
         }
         //计算每个用户的kda
         for (let i = 0; i < datas.length; i++) {
-            if (datas[i].boom === 0) datas[i].kd = datas[i].score
-            else datas[i].kd = datas[i].score / datas[i].boom
-            sortdata[i] = datas[i].kd;
+            if (datas[i].boom === 0) datas[i].SCORE = datas[i].score
+            else datas[i].SCORE = datas[i].score / datas[i].boom
+            sortdata[i] = datas[i].SCORE;
             index[i] = [i];
         }
         //根据用户的kda进行排序
@@ -645,7 +609,7 @@
                 if (k === "color")
                     continue;
                 let td = document.createElement('td');
-                if (k === "kd") {
+                if (k === "SCORE") {
                     td.innerHTML = datas[index[i]][k].toFixed(2);
                     tr.appendChild(td);
                     tr.style.background = cur_color;
@@ -660,8 +624,8 @@
 
     function sendmessage(xy) {
         let [x, y] = xy.split('-').map(n => n * 1);
-        let sendxy = JSON.stringify({"x": y, "y": x, "cookie": this_cookie})
-        socket.emit('click', sendxy)
+        let send_xy = JSON.stringify({"x": y, "y": x, "cookie": this_cookie})
+        socket.emit('click', send_xy)
     }
 
     //用于接受服务器一局游戏结束时发来的消息，用文字告知用户结果
@@ -678,14 +642,14 @@
                 boom: end_msg[key].boom,
                 color: end_msg[key].color,
                 score: end_msg[key].score,
-                kd: 0
+                SCORE: 0
             };
             j++;
         }
         for (let i = 0; i < datas.length; i++) {
-            if (datas[i].boom === 0) datas[i].kd = datas[i].score
-            else datas[i].kd = datas[i].score / datas[i].boom
-            sortdata[i] = datas[i].kd;
+            if (datas[i].boom === 0) datas[i].SCORE = datas[i].score
+            else datas[i].SCORE = datas[i].score / datas[i].boom
+            sortdata[i] = datas[i].SCORE;
             index[i] = [i];
         }
         for (let m = 0; m < sortdata.length; m++) {
@@ -702,11 +666,10 @@
         }
         for (let i = 0; i < datas.length; i++) {
 
-            end_str += "用户名：" + datas[index[i]].name + " ";
-            end_str += "坑壁值：" + datas[index[i]].boom + " ";
-            end_str += "使用颜色：" + datas[index[i]].color + " ";
-            end_str += "开荒数：" + datas[index[i]].score + " ";
-            end_str += "K/D：" + datas[index[i]].kd + " ";
+            end_str += "user：" + datas[index[i]].name + " ";
+            end_str += "bombs：" + datas[index[i]].boom + " ";
+            end_str += "blocks：" + datas[index[i]].score + " ";
+            end_str += "SCORES" + datas[index[i]].SCORE + " ";
             end_str += "\n"
 
         }

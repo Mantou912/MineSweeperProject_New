@@ -8,14 +8,13 @@ from .database import sqlOperator
 
 class Server:
     def __init__(self) -> None:
-        # self.__data_queue = []
-        # self.__lock = threading.Lock()
         self.__CM = ClearMine()
         self.__SQL = sqlOperator()
         self.__SQL.active()
         self.__ready = 0
 
     def login(self, username: str, password: str) -> bool:
+        self.__SQL.clearData()
         """用于用户登录时,判断收到的账号密码是否匹配"""
         data = self.__SQL.select_by_user(username)
         if data is None:
@@ -23,10 +22,6 @@ class Server:
         return password == data["passwd"]
 
     def click(self, x: int, y: int, username: str) -> Tuple[bool, str, bool, int]:
-        """
-        收到用户点击消息时执行, 返回值为:
-        1.是否是有效点击 2.颜色 3.游戏是否结束 4.本次点击的时间戳
-        """
         color_number = self.__CM.get_user_color_num(username)
         color_string = self.__CM.get_user_color_str(color_number)
         click_status = self.__CM.click(x, y, username)
@@ -41,36 +36,36 @@ class Server:
             boomCount = self.__SQL.select_userInfo_boomCount(username)
             self.__SQL.update_userInfo_boomCount(username, boomCount + 1)
             bool_ret = True
-
+        # 返回 有效点击 color 结束 点击时间
         return bool_ret, color_string, finish, self.__CM.get_timmer()
 
     def timmer(self) -> int:
-        """从扫雷对象中那到时间戳并返回"""
+        # 时间
         return self.__CM.get_timmer()
 
     def history(self) -> List[Tuple[int, int, str]]:
-        """从扫雷对象中那到本局历史点击记录并返回"""
+        # 历史
         return self.__CM.get_click_history()
 
     def args(self) -> dict:
-        """从扫雷对象中拿到本局地图参数并返回"""
+        # 地图数据
         return self.__CM.get_args()
 
-    def restart(self, waittime=-5) -> None:
-        """游戏需要重启时调用, 若需要等一会才进入下一局, 填写waittime表示等待时长, 小于0不等待"""
-        self.__ready = time.time() + waittime
+    def restart(self, waitTime=-5) -> None:
+        # 重启
+        self.__ready = time.time() + waitTime
         self.__CM.restart(True)
 
     def ready(self) -> bool:
-        """判断游戏是否可以进行"""
+        # ready
         return time.time() > self.__ready
 
     def give_color(self, username: str) -> None:
-        """为没有颜色的用户尽量随机分配一个不同的颜色"""
+        # 分配颜色
         self.__CM.give_color(username)
 
     def rank(self) -> dict:
-        """获取本局战绩"""
+        # 本局排名
         return self.__CM.get_rank()
 
     def total_rank(self) -> List[dict]:

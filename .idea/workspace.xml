@@ -4,22 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6123e941-81c2-45d4-b9cb-99960479e76b" name="更改" comment="Update f">
-      <change afterPath="$PROJECT_DIR$/templates/ranks_N.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+    <list default="true" id="6123e941-81c2-45d4-b9cb-99960479e76b" name="更改" comment="Bug小修复">
+      <change afterPath="$PROJECT_DIR$/templates/ranksList.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/minesweeper/clearmine.py" beforeDir="false" afterPath="$PROJECT_DIR$/minesweeper/mineSweeper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/minesweeper/colorrander.py" beforeDir="false" afterPath="$PROJECT_DIR$/minesweeper/rangeColor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/minesweeper/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/minesweeper/databaseOperator.py" beforeDir="false" afterPath="$PROJECT_DIR$/minesweeper/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/minesweeper/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/minesweeper/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/minesweeper/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/minesweeper/server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/imgs/1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/imgs/2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/imgs/3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/imgs/4.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/minesweeper.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/minesweeper.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/minesweeper_ori.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/minesweeper_ori.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/script.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ranks.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ranks_N.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/events.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/events.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/routes.py" afterDir="false" />
     </list>
@@ -142,7 +135,7 @@
       <workItem from="1686532743326" duration="6336000" />
       <workItem from="1686549214537" duration="836000" />
       <workItem from="1686550075369" duration="11490000" />
-      <workItem from="1686616763258" duration="4333000" />
+      <workItem from="1686616763258" duration="8788000" />
     </task>
     <task id="LOCAL-00001" summary="Update">
       <created>1686541448047</created>
@@ -165,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686573667670</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Bug小修复">
+      <created>1686621137096</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1686621137096</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,10 +185,11 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update" />
     <MESSAGE value="Update f" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update f" />
+    <MESSAGE value="Bug小修复" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug小修复" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/MineSweeperProject_New$Flask__main_py_.coverage" NAME="Flask (main.py) 覆盖结果" MODIFIED="1686620967968" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MineSweeperProject_New$Flask__main_py_.coverage" NAME="Flask (main.py) 覆盖结果" MODIFIED="1686624712816" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MineSweeperProject$Flask__main_py_.coverage" NAME="Flask (main.py) 覆盖结果" MODIFIED="1686447346509" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

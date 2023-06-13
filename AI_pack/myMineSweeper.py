@@ -40,13 +40,13 @@ class Click1():
     def __init__(self, x, y):
         with open('map.json', 'r') as f:
             self.map = json.load(f)
-        self.x = x;
+        self.x = x
         self.y = y
         self.height = len(self.map)
         self.width = len(self.map[0])
 
         if self.map[x][y] == '$':
-            print("You lose!");
+            print("You lose!")
             return
         if self.map[x][y] != '*':  # 所选区域已被选
             return
@@ -64,13 +64,13 @@ class Click1():
         c = self.count(xi, yi)
         self.map[xi][yi] = str(c)  # 统一用 str 类型存储
         if c == 0:  # 当且仅当周围没有雷时可以继续搜索
-            self.dfs(xi + 1, yi);
+            self.dfs(xi + 1, yi)
             self.dfs(xi - 1, yi)
-            self.dfs(xi, yi + 1);
+            self.dfs(xi, yi + 1)
             self.dfs(xi, yi - 1)
-            self.dfs(xi + 1, yi + 1);
+            self.dfs(xi + 1, yi + 1)
             self.dfs(xi - 1, yi - 1)
-            self.dfs(xi - 1, yi + 1);
+            self.dfs(xi - 1, yi + 1)
             self.dfs(xi + 1, yi - 1)
         return
 

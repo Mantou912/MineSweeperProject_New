@@ -1,4 +1,3 @@
-from random import randint
 from typing import Optional, List
 
 import pymysql
@@ -13,7 +12,6 @@ class sqlOperator:
         self.__password = password
         self.__database = database
 
-    # 激活对象
     def active(self):
         self.__connection = pymysql.connect(
             host=self.__host,
@@ -23,13 +21,11 @@ class sqlOperator:
         )
         self.__cursor = self.__connection.cursor(cursor=pymysql.cursors.DictCursor)
 
-    # 关闭对象功能
     def inactive(self):
         self.__connection.close()
         self.__cursor.close()
 
-    # 查询用户扫出的区域个数
-    # -4表示username错误
+    # -4 username错误
     def select_userInfo_clearCount(self, username) -> int:
         self.__connection.ping(reconnect=True)
         sql = "select clearCount from userInfo where username = '%s'" % username
@@ -40,8 +36,6 @@ class sqlOperator:
         else:
             return ret["clearCount"]
 
-    # 更新用户扫出的区域个数
-    # -4表示username错误  运行正常返回1
     def update_userInfo_clearCount(self, username, clearCount) -> int:
         self.__connection.ping(reconnect=True)
         sql = "update userInfo set clearCount = %d where username= '%s'" % (
@@ -55,8 +49,6 @@ class sqlOperator:
         else:
             return ret
 
-    # 查询用户炸雷个数
-    # -4表示username错误
     def select_userInfo_boomCount(self, username) -> int:
         self.__connection.ping(reconnect=True)
         sql = "select boomCount from userInfo where username = '%s'" % username
@@ -67,8 +59,6 @@ class sqlOperator:
         else:
             return ret["boomCount"]
 
-    # 更新用户炸雷个数
-    # -4表示username错误
     def update_userInfo_boomCount(self, username, boomCount):
         self.__connection.ping(reconnect=True)
         sql = "update userInfo set boomCount = %d where username= '%s'" % (
@@ -83,15 +73,18 @@ class sqlOperator:
             return ret
 
     def select_by_user(self, username: str) -> Optional[dict]:
-        """根据用户名查询匹配者的所有信息"""
         self.__connection.ping(reconnect=True)
         sql = f"select * from userInfo where username = '{username}'"
         self.__cursor.execute(sql)
         return self.__cursor.fetchone()
 
     def get_totalRank_data(self) -> Optional[List[dict]]:
-        """查询总榜(所有用户)信息"""
         self.__connection.ping(reconnect=True)
         sql = "select username, clearCount, boomCount from userInfo"
         self.__cursor.execute(sql)
         return self.__cursor.fetchall()
+
+    def clearData(self):
+        self.__connection.ping(reconnect=True)
+        sql = f"update userInfo set clearCount=0,boomCount=0"
+        self.__cursor.execute(sql)

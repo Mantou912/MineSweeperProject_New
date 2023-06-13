@@ -22,7 +22,7 @@ def login_connect():
     password = request.args.get('password', '')
     if username and password:
         logging.info(f'name = {username}')
-        # 先判断账号密码是否正确
+        # 账号正确判断
         if CM_server.login(username, password):
             # 生成cookie
             cookie = None
@@ -33,7 +33,7 @@ def login_connect():
                     break
             logging.info('cookie生成完成...')
 
-            # 如果用户多次登录, 撤销用户先前的cookie, 设置cookie, 并设置最近活跃时间
+            # 多次登录, 设置新cookie
             if username in user_cookie:
                 del cookie_user_dict[user_cookie[username]]
             user_cookie[username] = cookie
@@ -52,10 +52,9 @@ def login_connect():
 
 @clearMine_socketio.on('disconnect', namespace='/login')
 def login_disconnect():
-    """登录连接断开时执行"""
     username = request.args.get('username', '')
     password = request.args.get('password', '')
-    logging.info(f'登陆链接断开{username}')
+    logging.info(f'fail {username}')
 
 
 @clearMine_socketio.on('connect', namespace='/minesweeper')
@@ -76,7 +75,7 @@ def mine_connect():
 
 @clearMine_socketio.on('disconnect', namespace='/minesweeper')
 def mine_disconnect():
-    """扫雷链接断开时, 注销用户cookie"""
+    # 断开 注销cookie
     cookie = request.args.get('cookie', '')
     user_cookie_tm = cookie_user_dict.get(cookie, None)
     if user_cookie_tm:
@@ -142,19 +141,3 @@ def rank_connect():
 @clearMine_socketio.on('disconnect', namespace='/ranks')
 def rank_connect():
     logging.info('查看总榜链接断开...')
-
-
-@clearMine_socketio.on('total_rank', namespace='/ranks')
-def get_total_rank(info):
-    """发送查询到的战绩总榜信息"""
-    try:
-        if info != 'query rank': return False
-        cookie = request.args['cookie']
-        username, tm = cookie_user_dict[cookie]
-        cookie_user_dict[cookie] = (username, time.time())
-        emit('total_rank', json.dumps(CM_server.total_rank()))
-        logging.info('总榜信息发送完成...')
-
-    except Exception as e:
-        logging.info('>>> error ' + str(type(e)) + ' ' + str(e))
-        disconnect()
