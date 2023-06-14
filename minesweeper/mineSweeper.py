@@ -104,17 +104,14 @@ class ClearMine:
         x = delta % row_size
         delta //= row_size
         y = delta % col_size
-
         return x, y
 
     def __distribute(self) -> None:
         """构造雷区, 对象的属性board和color在这里面定义/重置"""
-
         # 雷区地图
         self.__board = np.zeros(
             [self.__size_row, self.__size_col], dtype=ClearMine.CELLTYPE
         )
-
         # 雷区格子颜色(为0时表示状态格子掩盖)
         self.__color = np.zeros(
             [self.__size_row, self.__size_col], dtype=ClearMine.CELLTYPE
