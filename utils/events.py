@@ -13,7 +13,6 @@ from .objects import (
     gen_cookie,
 )
 
-
 @clearMine_socketio.on('connect', namespace='/login')
 def login_connect():
     # 收到登录请求,进行身份识别

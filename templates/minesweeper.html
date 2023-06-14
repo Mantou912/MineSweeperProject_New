@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8"/>
     <title>MineSweeper</title>
-    <link rel="stylesheet" href="./style.css">
     <style>
         * {
             margin: 2px;
@@ -375,7 +374,7 @@
         let y = ~~(ev.offsetY / w);
         let xy = x + '-' + y;
         //点击时关闭菜单页面
-        closeMenu();
+        //closeMenu();
         //点击一次时先将格子打开之后再复颜色
         if (g_arr.includes(xy) && g_obj[xy].open === 0)
             sendmessage(xy);
