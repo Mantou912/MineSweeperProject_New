@@ -194,6 +194,12 @@
                 <span></span>
                 <span></span>
             </button>
+            <button class="btn" onclick="Ai_login()" id="AiBtn" style="margin-left: 30px">AI
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <script>
                 //登录事件
                 function login() {
@@ -215,6 +221,22 @@
                         } else {
                             window.location.href = encodeURI('/minesweeper?uname=' + cookie);
                         }
+                    })
+                }
+
+                function Ai_login() {
+                    document.getElementById("AiBtn").style.color = "red";
+                    let socket = io.connect('ws://' + document.domain + ':' + location.port + '/Ai', {
+                        reconnectionDelayMax: 10000,
+                        query: {
+                            "username": "Ai",
+                            "password": "123456"
+                        }
+                    });
+
+                    //接收服务器信息，传送cookie
+                    socket.on("reply", (cookie) => {
+                        window.open(encodeURI('/minesweeper_ai?uname=' + cookie), "_blank", "resizable,scrollbars,status");
                     })
                 }
             </script>

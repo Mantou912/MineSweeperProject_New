@@ -133,14 +133,13 @@
             }
         }
     </style>
-
 </head>
-
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <body>
 <div class="header" style="display: flex;align-items: center;width:auto;height: auto">
     <h2 style="width: 900px;text-align: center">Online Minesweeper</h2>
     <a style="margin-left: 200px">
-        <button class="btn" id="AiBtn">AI
+        <button class="btn" id="AiBtn" onclick="ai_click()">AI
             <span></span>
             <span></span>
             <span></span>
@@ -169,8 +168,8 @@
     let DEFAULT_COL_SZIE = 40;
     let DEFAULT_SEED = 1437341;
     let DEFAULT_MOD = 33554393;
-    let DEFAULT_PART_SIZE = 10;
-    let DEFAULT_PART_MINE_NUM = 20;
+    let DEFAULT_PART_SIZE = 16;
+    let DEFAULT_PART_MINE_NUM = 70;
     let DEFAULT_DELTA = DEFAULT_SEED;
     let fib1 = 1;
     let fib2 = 2;
@@ -189,6 +188,8 @@
     let r = 10;
     //每个格子之间相隔的距离
     let m = 4;
+    let click_x = 75; //75+40*列（0-39）
+    let click_y = 125; //125+40*行（0-29）
 
     function start(row, col, seed, mod, size, mine_num) {
         init(row, col, seed, mod, size, mine_num);
@@ -217,13 +218,27 @@
         mine_arr = [];
 
         //循环生成坐标信息，并在canvas中画出
-        //y-i-height x-j-width
         for (let i = 0; i < DEFAULT_ROW_SIZE; i++) {
             for (let j = 0; j < DEFAULT_COL_SZIE; j++) {
                 let xy = j + '-' + i;
                 g_arr.push(xy);
-                g_obj[xy] = {mark: 0, open: 0, init: 0, time: 9999999999};
+                g_obj[xy] = {mark: 0, open: 0, init: 0, time: 9999999999, ismine: 0};
                 drawBlock(xy, g_color.block);
+            }
+        }
+    }
+
+    function autoclick(x, y) {
+        if (x >= 30 || y >= 40) {
+            return;
+        }
+        state = 0;
+        let xy = x + '-' + y;
+        if (1) {
+            if (g_obj[xy].open != 1 && g_obj[xy].mark != -1) {
+                state = 1;
+                global_x = x;
+                global_y = y;
             }
         }
     }
@@ -304,6 +319,73 @@
         g_obj[kl].init = temp;
     }
 
+    let state = 0
+    let global_x = 10, global_y = 10
+
+    function aiClick() {
+        $.getJSON("http://127.0.0.1:8000", function (data) {
+            // data 是一个对象，包含了 {"x": 0, "y": 0}
+            global_x = data.x; // x 的值是 0
+            global_y = data.y; // y 的值是 0
+        });
+    }
+
+
+    function autoClick(x, y) {
+        state = 0;
+        let xy = x + '-' + y;
+        if (g_obj[xy].open === 1) {
+            let dire = [[1, 1], [1, 0], [1, -1], [0, 1], [0, -1], [-1, -1], [-1, 0], [-1, 1]];
+            let ans0 = 0, ans1 = 0;
+            for (i in dire) {
+                if (0 <= x + i[0] && x + i[0] < 40 && 0 <= y + i[1] && y + i[1] < 30) {
+                    if (g_obj[(x + i[0]) + '-' + (y + i[1])].open !== 1) ans0 += 1;
+                    if (g_obj[(x + i[0]) + '-' + (y + i[1])].ismine === 1) ans1 += 1;
+                }
+            }
+            if (ans0 !== 0 && ans0 === g_obj[(x + i[0]) + '-' + (y + i[1])]) {
+                for (i in dire) {
+                    if (0 <= x + i[0] && x + i[0] < 40 && 0 <= y + i[1] && y + i[1] < 30) {
+                        if (g_obj[(x + i[0]) + '-' + (y + i[1])].mark === -1)
+                            g_obj[(x + i[0]) + '-' + (y + i[1])].ismine = 1;
+                    }
+                }
+            }
+            if (ans1 !== 0 && ans1 === g_obj[(x + i[0]) + '-' + (y + i[1])]) {
+                for (i in dire) {
+                    if (0 <= x + i[0] && x + i[0] < 30 && 0 <= y + i[1] && y + i[1] < 40) {
+                        if (g_obj[(x + i[0]) + '-' + (y + i[1])].mark !== -1) {
+                            global_x = x + i[0]
+                            global_y = y + i[1]
+                            state = 1;
+                            break
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function ai_click() {
+        for (let i = 0; i < 70; i++) {
+            for (let j = Math.max(0, i - 39); j <= Math.min(39, i); j++) {
+                autoclick(i - j, j);
+                if (state === 1) break;
+            }
+            if (state === 1) break;
+        }
+        if (state === 1) {
+            state = 0;
+        }
+        let event = document.createEvent("MouseEvents");
+        global_y = 125 + 40 * global_y;
+        global_x = 75 + 40 * global_x;
+        event.initMouseEvent("click", true, true, window, 0, 0, 0, global_x, global_y, false, false, false, false, 0, null);
+        canv.dispatchEvent(event);
+    }
+
+    setInterval(ai_click, 1800);
+
     function setMine() {
         mine_arr.forEach(n => {
             g_obj[n].mark = -1;
@@ -351,16 +433,6 @@
         return around;
     }
 
-    function ai_click() {
-        /*let event = new MouseEvent("click", {
-            bubbles: true,
-            cancelable: true,
-            view: window,
-        });
-        let el = document.elementFromPoint(x, y);
-        el.dispatchEvent(event)*/
-    }
-
     function drawBlock(xy, c) {
         let [x, y] = xy.split('-').map(n => n * w);
         ctx.save();
@@ -377,8 +449,6 @@
 
     //为画布增加监听事件
     canv.addEventListener('click', openBlock);
-    //为画布增加右键点击菜单事件
-    canv.addEventListener("contextmenu", markFlag);
 
 
     function openBlock(ev) {
@@ -386,8 +456,6 @@
         let x = ~~(ev.offsetX / w);
         let y = ~~(ev.offsetY / w);
         let xy = x + '-' + y;
-        //点击时关闭菜单页面
-        //closeMenu();
         //点击一次时先将格子打开之后再复颜色
         if (g_arr.includes(xy) && g_obj[xy].open === 0)
             sendmessage(xy);
@@ -404,18 +472,6 @@
             dfsunzero(xy);
         }
         console.log(x, y);
-    }
-
-
-    function markFlag(ev) {
-        ev.preventDefault();
-        //获得 x与y坐标
-        let x = ~~(ev.offsetX / w);
-        let y = ~~(ev.offsetY / w);
-        let xy = x + '-' + y;
-        if (g_obj[xy].open === 0)
-            markText(xy, mine[1]);
-        return false;
     }
 
     function dfszero(xy) {
@@ -506,11 +562,6 @@
             markText(xy, g_obj[xy].mark);
             dfshistoryunzero(xy, revcolor, timmer);
         }
-    }
-
-    function closeMenu() {
-        let contextmenu = document.getElementById("context");
-        contextmenu.style.display = "none";
     }
 
 
@@ -689,12 +740,12 @@
         alert("本局游戏结束！\n" + end_str);
     });
 
+
     //用于接受服务器的广播消息，即当有用户点击时，更新所有用户的界面
     socket.on("broadcast", (revbroad) => {
         let msg = JSON.parse(revbroad);
         let revx = msg.y;
         let revy = msg.x;
-        //updateJSON(revx, revy);
         let revcolor = msg.color;
         let revtimmer = msg.timmer;
         let xy = `${revx}-${revy}`;

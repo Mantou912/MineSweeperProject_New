@@ -13,6 +13,7 @@ from .objects import (
     gen_cookie,
 )
 
+
 @clearMine_socketio.on('connect', namespace='/login')
 def login_connect():
     # 收到登录请求,进行身份识别
@@ -26,6 +27,39 @@ def login_connect():
             # 生成cookie
             cookie = None
 
+            while True:
+                cookie = str(gen_cookie())
+                if cookie not in cookie_user_dict:
+                    break
+            logging.info('cookie generate')
+
+            # 如果用户多次登录, 撤销用户先前的cookie, 设置cookie, 并设置最近活跃时间
+            if username in user_cookie:
+                del cookie_user_dict[user_cookie[username]]
+            user_cookie[username] = cookie
+            cookie_user_dict[cookie] = (username, time.time())
+            logging.info('cookie rev')
+
+            emit('reply', cookie)
+            logging.info('emit cookie')
+        else:
+            emit('reply', 'deny')
+            logging.info('emit deny')
+    else:
+        logging.error(f'>>> error username or password is empty')
+        disconnect()
+
+
+@clearMine_socketio.on('connect', namespace='/Ai')
+def Ai_login_connect():
+    logging.info('Ai receive request')
+    username = request.args.get('username', '')
+    password = request.args.get('password', '')
+    if username and password:
+        logging.info(f'name = {username}')
+        # 先判断账号密码是否正确
+        if CM_server.ai_login(username, password):
+            cookie = None
             while True:
                 cookie = str(gen_cookie())
                 if cookie not in cookie_user_dict:

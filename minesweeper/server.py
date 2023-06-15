@@ -21,6 +21,13 @@ class Server:
             return False
         return password == data["passwd"]
 
+    def ai_login(self, username: str, password: str) -> bool:
+        # Ai登录验证
+        data = self.__SQL.select_by_user(username)
+        if data is None:
+            return False
+        return password == data["passwd"]
+
     def click(self, x: int, y: int, username: str) -> Tuple[bool, str, bool, int]:
         color_number = self.__CM.get_user_color_num(username)
         color_string = self.__CM.get_user_color_str(color_number)

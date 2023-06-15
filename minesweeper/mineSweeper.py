@@ -22,10 +22,11 @@ class ClearMine:
 
     def __init__(
             self,
+            # 1200格 子块大小100 子块20有雷
             size_row: int = 30,
             size_col: int = 40,
-            part_size: int = 16,  # 每一子块边长, 保证不要超过numpy.int16
-            part_mine_num: int = 70,  # 每一子块的雷数, 保证不要超过子块大小
+            part_size: int = 10,  # 子块边长
+            part_mine_num: int = 20,  # 子块雷数
             seed: int = 1437341,
             mod: int = 33554393,
     ) -> None:

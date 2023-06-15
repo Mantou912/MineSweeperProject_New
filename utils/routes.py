@@ -30,6 +30,20 @@ def mine():
     return res
 
 
+@clearMine_blueprint.route('/minesweeper_ai', methods=['GET', 'POST'])
+def ai_mine():
+    """判断权限, 对有权限者回馈扫雷游戏页面"""
+    res = '无权限'
+    try:
+        if request.args['uname'] in cookie_user_dict:
+            res = make_response(render_template('minesweeper_ai.html'))
+        else:
+            res += ', 请重新登录'
+    except Exception as e:
+        print(e)
+    return res
+
+
 @clearMine_blueprint.route('/ranks', methods=['GET', 'POST'])
 def total_rank():
     """判断权限, 对有权限者回馈扫雷战绩总榜页面"""
